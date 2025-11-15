@@ -170,5 +170,152 @@ class LinuxCommandToolkit:
         command.append(file_name)
         return self._execute_command(command)
 
+    def cd(self, 
+           path: str = None) -> Dict:
+        """Thay đổi thư mục hiện tại."""
+        try: 
+            if path is None or path == "~":
+                path = os.path.expanduser("~")
+            elif path == '.':
+                # cd . -> Directory remains the same
+                path = os.getcwd() 
+            elif path == '..':
+                path = os.path.dirname(os.getcwd())
+            
+            os.chdir(path)
+            current = os.getcwd()
+            result = {
+                "command": f"cd {path}",
+                "success": True,
+                "summary": {
+                    "current_directory": current,
+                }
+            }
+        except Exception as e:
+            return {
+                "command": f"cd {path}",
+                "success": False,
+                "error": str(e)
+            }
+        self.history.append(result)
+        return result
+    
+    def rm(self, 
+           paths = List[str],
+           # Xoá đè quy dir ..
+           recursive: bool = False,
+           # Force xoá và không hỏi
+           force: bool = False,
+           interactive: bool = False,
+           verbose: bool = False,
+           dir_mode: bool = False) -> Dict:
+        
+        """Xoá tệp hoặc thư mục.
+        Args:
+            paths (List[str]): Danh sách các tệp hoặc thư mục cần xoá.
+            (-r) recursive (bool): Nếu True, xoá đệ quy các thư mục.
+            (-f) force (bool): Nếu True, bỏ qua các cảnh báo và lỗi.
+            (-i) interactive (bool): Nếu True, hỏi xác nhận trước khi xoá.
+            (-v) verbose (bool): Nếu True, hiển thị thông tin chi tiết khi xoá.
+            (-d) dir_mode (bool): Nếu True, xoá thư mục thay vì tệp.
+        Returns:
+            Dict: Kết quả thực thi lệnh rm.
+        """
+        command = ['rm']
+        if recursive:
+            command.append('-r')
+        if force:
+            command.append('-f')
+        if interactive:
+            command.append('-i')
+        if verbose:
+            command.append('-v')
+        if dir_mode:
+            command.append('-d')
+        
+        command.extend(paths)
+        return self._execute_command(command)
 
+    def chmod(self, 
+              path: str,
+              mode: str,
+              recursive: bool = False,
+              verbose: bool = False) -> Dict:
+        """Thay đổi quyền truy cập của tệp hoặc thư mục.
+        Args:
+            path (str): Đường dẫn đến tệp hoặc thư mục.
+            mode (str): Quyền truy cập mới (ví dụ: '755', 'u+rwx').
+            recursive (bool): Nếu True, thay đổi quyền truy cập đệ quy.
+            verbose (bool): Nếu True, hiển thị thông tin chi tiết khi thay đổi.
+        
+        Returns:
+            Dict: Kết quả thực thi lệnh chmod.
+        """
+        command = ['chmod']
+        if recursive:
+            command.append('-r')
+        if verbose:
+            command.append('-v')
+        
+        command.extend([mode, path])
+
+        return self._execute_command(command)
+    
+    def chown(self,
+              path: str,
+              owner: str,
+              group: Optional[str] = None,
+              recursive: bool = False) -> Dict:
+        """Thay đổi chủ sở hữu và nhóm của tệp hoặc thư mục.
+        Args:
+            path (str): Đường dẫn đến tệp hoặc thư mục.
+            owner (str): Chủ sở hữu mới.
+            group (Optional[str]): Nhóm mới.
+            recursive (bool): Nếu True, thay đổi đệ quy.
+        Returns:
+            Dict: Kết quả thực thi lệnh chown.
+        """
+        command = ['chown']
+        if recursive:
+            command.append('-R')
+        if group:
+            command.append(f"{owner}:{group}")
+        else:
+            command.append(owner)
+        
+        command.append(path)
+        return self._execute_command(command)
+    
+    def ps(self,
+        filter: Optional[str] = None,
+        show_all: bool = False,
+        format_fields: Optional[List[str]] = None) -> Dict:
+        """"Liệt kê các tiến trình đang chạy.
+        Args:
+            filter (Optional[str]): Lọc tiến trình theo tên hoặc PID.
+            show_all (bool): Nếu True, hiển thị tất cả tiến trình.
+            format_fields (Optional[List[str]]): Các trường để hiển thị.
+        Returns:
+            Dict: Kết quả thực thi lệnh ps.
+        """
+        command = ['ps']
+        if show_all:
+            command.append('-e')
+        if filter:
+            command.extend(['-C', filter])
+        if format_fields:
+            command.extend(['-o', ','.join(format_fields)])
+
+        return self._execute_command(command)
+        
+    def kill(self, pid: int, signal: str = 'TERM') -> Dict: 
+        """Kill a process by PID.
+        Args:
+            pid (int): Process ID to kill.
+            signal (str): Signal to send (default is 'TERM').
+        Returns:
+            Dict: Kết quả thực thi lệnh kill.
+        """
+        command = ['kill', f'-{signal}', str(pid)]
+        return self._execute_command(command)
 
