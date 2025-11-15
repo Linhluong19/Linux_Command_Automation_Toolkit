@@ -172,7 +172,7 @@ class LinuxCommandToolkit:
 
     def cd(self, 
            path: str = None) -> Dict:
-        """Thay đổi thư mục hiện tại."""
+        """Change the current directory."""
         try: 
             if path is None or path == "~":
                 path = os.path.expanduser("~")
@@ -202,9 +202,9 @@ class LinuxCommandToolkit:
     
     def rm(self, 
            paths = List[str],
-           # Xoá đè quy dir ..
+           # Recursively delete directory …
            recursive: bool = False,
-           # Force xoá và không hỏi
+           # Force delete without prompting.
            force: bool = False,
            interactive: bool = False,
            verbose: bool = False,
@@ -212,14 +212,14 @@ class LinuxCommandToolkit:
         
         """Xoá tệp hoặc thư mục.
         Args:
-            paths (List[str]): Danh sách các tệp hoặc thư mục cần xoá.
-            (-r) recursive (bool): Nếu True, xoá đệ quy các thư mục.
-            (-f) force (bool): Nếu True, bỏ qua các cảnh báo và lỗi.
-            (-i) interactive (bool): Nếu True, hỏi xác nhận trước khi xoá.
-            (-v) verbose (bool): Nếu True, hiển thị thông tin chi tiết khi xoá.
-            (-d) dir_mode (bool): Nếu True, xoá thư mục thay vì tệp.
+            paths (List[str]): List of files or directories to delete.
+            (-r) recursive (bool): If True, delete directories recursively.
+            (-f) force (bool): If True, ignore warnings and errors during deletion.
+            (-i) interactive (bool): If True, prompt for confirmation before deleting.
+            (-v) verbose (bool): If True, display detailed output during deletion.
+            (-d) dir_mode (bool): If True, treat the target as a directory rather than a file.
         Returns:
-            Dict: Kết quả thực thi lệnh rm.
+            Dict: The execution result returned by the rm operation
         """
         command = ['rm']
         if recursive:
@@ -241,15 +241,15 @@ class LinuxCommandToolkit:
               mode: str,
               recursive: bool = False,
               verbose: bool = False) -> Dict:
-        """Thay đổi quyền truy cập của tệp hoặc thư mục.
+        """Change the permissions of a file or directory.
         Args:
-            path (str): Đường dẫn đến tệp hoặc thư mục.
-            mode (str): Quyền truy cập mới (ví dụ: '755', 'u+rwx').
-            recursive (bool): Nếu True, thay đổi quyền truy cập đệ quy.
-            verbose (bool): Nếu True, hiển thị thông tin chi tiết khi thay đổi.
+            path (str): The path to the file or directory.
+            mode (str): The new permission setting (e.g., '755', 'u+rwx').
+            recursive (bool): If True, apply the permission change recursively.
+            verbose (bool): If True, display detailed output during the operation.
         
         Returns:
-            Dict: Kết quả thực thi lệnh chmod.
+            Dict: The result of executing the chmod command.
         """
         command = ['chmod']
         if recursive:
@@ -266,15 +266,18 @@ class LinuxCommandToolkit:
               owner: str,
               group: Optional[str] = None,
               recursive: bool = False) -> Dict:
-        """Thay đổi chủ sở hữu và nhóm của tệp hoặc thư mục.
-        Args:
-            path (str): Đường dẫn đến tệp hoặc thư mục.
-            owner (str): Chủ sở hữu mới.
-            group (Optional[str]): Nhóm mới.
-            recursive (bool): Nếu True, thay đổi đệ quy.
-        Returns:
-            Dict: Kết quả thực thi lệnh chown.
-        """
+        """Change the owner and group of a file or directory.
+
+            Args:
+                path (str): The path to the file or directory.
+                owner (str): The new owner.
+                group (Optional[str]): The new group.
+                recursive (bool): If True, apply the change recursively.
+            
+            Returns:
+                Dict: The result of executing the chown command.
+            """
+
         command = ['chown']
         if recursive:
             command.append('-R')
@@ -290,14 +293,17 @@ class LinuxCommandToolkit:
         filter: Optional[str] = None,
         show_all: bool = False,
         format_fields: Optional[List[str]] = None) -> Dict:
-        """"Liệt kê các tiến trình đang chạy.
-        Args:
-            filter (Optional[str]): Lọc tiến trình theo tên hoặc PID.
-            show_all (bool): Nếu True, hiển thị tất cả tiến trình.
-            format_fields (Optional[List[str]]): Các trường để hiển thị.
-        Returns:
-            Dict: Kết quả thực thi lệnh ps.
-        """
+        """List running processes.
+
+            Args:
+                filter (Optional[str]): Filter processes by name or PID.
+                show_all (bool): If True, display all processes.
+                format_fields (Optional[List[str]]): Specific fields to display.
+            
+            Returns:
+                Dict: The result of executing the ps command.
+            """
+
         command = ['ps']
         if show_all:
             command.append('-e')
@@ -310,12 +316,15 @@ class LinuxCommandToolkit:
         
     def kill(self, pid: int, signal: str = 'TERM') -> Dict: 
         """Kill a process by PID.
-        Args:
-            pid (int): Process ID to kill.
-            signal (str): Signal to send (default is 'TERM').
-        Returns:
-            Dict: Kết quả thực thi lệnh kill.
-        """
+
+            Args:
+                pid (int): The Process ID to terminate.
+                signal (str): The signal to send (default is 'TERM').
+            
+            Returns:
+                Dict: The result of executing the kill command.
+            """
+
         command = ['kill', f'-{signal}', str(pid)]
         return self._execute_command(command)
 
