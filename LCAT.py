@@ -328,3 +328,47 @@ class LinuxCommandToolkit:
         command = ['kill', f'-{signal}', str(pid)]
         return self._execute_command(command)
 
+    def top(self,
+            interactions: int = 1,
+            batch_mode: bool = True,
+            sort_by: str = 'cpu',
+            delay: int = 3) -> Dict:
+        
+        """
+        Display running processes in real-time.
+        Args:
+            interactions (int): Number of update cycles.
+            batch_mode (bool): If True, run in batch mode.
+            sort_by (str): Sorting criteria ('cpu', 'mem').
+            delay (int): Delay between updates (seconds).
+        Returns:
+        Dict: Result of executing the 'top' command.
+        """
+        command = ['top']
+        if batch_mode:
+            command.append('-b')
+        
+        command.extend(['-n', str(interactions)])
+        if sort_by == 'cpu':
+            command.append('-o %CPU')
+        elif sort_by == 'mem':
+            command.append('-o %MEM')
+        
+        result = self._execute_command(command)
+        return result
+   
+    def free(self,
+             human_readable: bool = True) -> Dict:
+        """Display system memory information.
+        Args:
+            human_readable (bool): If True, show memory sizes in a readable format.
+        Returns:
+            Dict: Result of executing the 'free' command.
+        """
+        command = ['free']
+        if human_readable:
+            command.append('-h')
+        
+        return self._execute_command(command)
+
+
