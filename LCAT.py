@@ -436,4 +436,26 @@ class LinuxCommandToolkit:
         
         return self._execute_command(command)
 
+    def visualization_result(self, result: Dict) -> None:
+        """Display the results in a visual format.
+        
+        Args:
+            result (Dict): The result to be displayed.
+        """
+        viz = []
+        viz.append("=" * 33)
+        viz.append(f"Command: {result.get('command', '')}")
+        viz.append(f"Success: {result.get('success', False)}")
+        viz.append(f"Return Code: {result.get('returncode', '')}")
+        viz.append("=" * 33)
+        if 'stdout' in result and result['stdout']:
+            viz.append("Output:")
+            viz.append(result['stdout'])
+        if 'stderr' in result and result['stderr']:
+            viz.append("Error:")
+            viz.append(result['stderr'])
+        viz.append("=" * 33)
+        print('\n'.join(viz))
+
+
 
