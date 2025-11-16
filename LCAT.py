@@ -371,4 +371,69 @@ class LinuxCommandToolkit:
         
         return self._execute_command(command)
 
+    def grep(self,
+             pattern: str,
+             file_path: str,
+             ignore_case: bool = False,
+             recursive: bool = False) -> Dict:
+        
+        """Search for a pattern in a file or directory.
+        
+        Args:
+            pattern (str): The pattern to search for.
+            file_path (str): The path to the file or directory.
+            ignore_case (bool): If True, ignore case sensitivity.
+            recursive (bool): If True, search recursively within directories.
+        
+        Returns:
+            Dict: The result of executing the grep command.
+        """
+
+        command = ['grep']
+
+        if ignore_case:
+            command.append('-i')
+        if recursive:
+            command.append('-r')
+        
+        command.extend([pattern, file_path])
+        return self._execute_command(command)
+
+    def find(self, path: str = ".",
+             name_pattern: Optional[str] = None,
+             file_type: Optional[str] = None,
+             min_size: Optional[str] = None,
+             max_size: Optional[str] = None,
+             max_depth: Optional[int] = None) -> Dict:
+        
+
+        """
+        Search for files and directories based on various criteria.
+        
+        Args:
+            path (str): The starting path for the search.
+            name_pattern (Optional[str]): Filename pattern to match.
+            file_type (Optional[str]): File type ('f' for files, 'd' for directories).
+            min_size (Optional[str]): Minimum file size (e.g., '10M').
+            max_size (Optional[str]): Maximum file size (e.g., '100M').
+            max_depth (Optional[int]): Maximum search depth.
+        
+        Returns:
+            Dict: The result of executing the find command.
+        """
+
+        command = ['find', path]
+        if name_pattern:
+            command.extend(['-name', name_pattern])
+        if file_type:
+            command.extend(['-type', file_type])
+        if min_size:
+            command.extend(['-size', f'+{min_size}'])
+        if max_size:
+            command.extend(['-size', f'-{max_size}'])
+        if max_depth is not None:
+            command.extend(['-maxdepth', str(max_depth)])
+        
+        return self._execute_command(command)
+
 
