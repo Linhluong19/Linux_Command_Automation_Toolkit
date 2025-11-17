@@ -210,7 +210,7 @@ class LinuxCommandToolkit:
            verbose: bool = False,
            dir_mode: bool = False) -> Dict:
         
-        """Xoá tệp hoặc thư mục.
+        """Delete file or folder.
         Args:
             paths (List[str]): List of files or directories to delete.
             (-r) recursive (bool): If True, delete directories recursively.
@@ -457,32 +457,32 @@ class LinuxCommandToolkit:
         viz.append("=" * 33)
         print('\n'.join(viz))
 
-    def interactive_mode():
-        """Interactive Mode for LinuxCommandToolkit."""
-        lct = LinuxCommandToolkit()
-        print("Welcome to the Linux Command Toolkit Interactive Mode!")
-        print("Type 'exit' to quit.")
-        
-        while True:
-            try:
-                user_input = input("lct> ")
-                if user_input.lower() in ['exit', 'quit']:
-                    print("Exiting interactive mode. Goodbye!")
-                    break
-                
-                parts = user_input.split()
-                command = parts[0]
-                args = parts[1:]
-                
-                if hasattr(lct, command):
-                    method = getattr(lct, command)
-                    result = method(*args)
-                    lct.visualization_result(result)
-                else:
-                    print(f"Unknown command: {command}")
+def interactive_mode():
+    """Interactive Mode for LinuxCommandToolkit."""
+    lct = LinuxCommandToolkit()
+    print("Welcome to the Linux Command Toolkit Interactive Mode!")
+    print("Type 'exit' to quit.")
+    
+    while True:
+        try:
+            user_input = input("lct> ")
+            if user_input.lower() in ['exit', 'quit']:
+                print("Exiting interactive mode. Goodbye!")
+                break
             
-            except Exception as e:
-                print(f"Error: {str(e)}")
-    if __name__ == "__main__":
-        interactive_mode()
+            parts = user_input.split()
+            command = parts[0]
+            args = parts[1:]
+            
+            if hasattr(lct, command):
+                method = getattr(lct, command)
+                result = method(*args)
+                lct.visualization_result(result)
+            else:
+                print(f"Unknown command: {command}")
+        
+        except Exception as e:
+            print(f"Error: {str(e)}")
+if __name__ == "__main__":
+    interactive_mode()
     
