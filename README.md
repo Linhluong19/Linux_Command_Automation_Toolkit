@@ -37,10 +37,12 @@ This toolkit is especially useful for:
 
 ## Project Overview
 
-LCAT encapsulates common Linux shell operations inside a single Python class called LinuxCommandToolkit.
+LCAT encapsulates common Linux shell operations inside a single Python class called `LinuxCommandToolkit`.
 
 It exposes methods corresponding to Linux utilities such as:
+
 `ls`, `rm`, `mkdir`, `touch`, `cd`, `pwd`, `chmod`, `chown`, `ps`, `kill`, `top`, `free`,`grep`, `find`
+
 
 Each method internally uses Python's `subprocess` (except for `cd`), standardizes the output, and stores full execution metadata in a history log.
 
@@ -63,6 +65,7 @@ You can use LCAT in interactive REPL mode, or as an imported Python module.
 ## Installation
 
 
+
 ### 1. Clone the repository
 
 ``` bash
@@ -78,6 +81,7 @@ python3 --version
 ```
 
 
+
 ### 3. Dependencies
 
 LCAT uses only Python's standard library, including: 
@@ -90,6 +94,7 @@ LCAT uses only Python's standard library, including:
 - `sys`
 
 No external packages are required.
+
 
 ### Optional: Create a virtual environment
 
@@ -109,9 +114,13 @@ venv\Scripts\activate         # Windows
 
 ------------------------------------------------------------------------
 
+
+
 ## How It Works
 
+
 ### 1. Central Execution Engine: `_execute_command()`
+
 
 All Linux commands eventually route through this method.
 
@@ -122,7 +131,9 @@ It handles:
 - returning structured results
 - logging history
 
+
 ### 2. Wrapper Methods for Linux Commands
+
 
 Examples:
 
@@ -148,6 +159,8 @@ Examples:
 
 Each returns a normalized dictionary.
 
+
+
 ### 3. Interactive Shell (REPL)
 
 Running:
@@ -170,7 +183,9 @@ The REPL:
 - executes methods
 - prints formatted results
 
+
 ------------------------------------------------------------------------
+
 
 ## Features
 
@@ -182,9 +197,12 @@ The REPL:
 -   Automation-friendly class design
 -   Consistent platform behavior
 
+
 ------------------------------------------------------------------------
 
+
 ## Usage
+
 
 ### 1. Interactive Mode
 
@@ -193,6 +211,7 @@ python3 LCAT.py
 ```
 
 Example session:
+
 
 ```
 lct> who_am_i
@@ -205,6 +224,7 @@ lct> rm -r old_logs
 Exit:
 
 `lct> exit`
+
 
 ------------------------------------------------------------------------
 
@@ -219,6 +239,7 @@ result = lct.ls(long_format=True, path=".")
 print(result["stdout"])
 ```
 
+
 More examples:
 
 ``` python
@@ -228,20 +249,21 @@ lct.touch("project/app.py")
 ```
 
 ------------------------------------------------------------------------
+#### Example Commands
 
-## Example Commands
-
-  Action            Command
-  ----------------- --------------------------------------
-  List all files    `lct> ls -a`
-  Long listing      `lct> ls -l`
-  Create folder     `lct> mkdir test`
-  Delete file       `lct> rm test.txt`
-  Kill a process    `lct> kill 1337`
-  Search for text   `lct> grep -i error /var/log/syslog`
-  Find files        `lct> find . -name '*.py'`
+| Action          | Command                              |
+| --------------- | ------------------------------------ |
+| List all files  | `lct> ls -a`                         |
+| Long listing    | `lct> ls -l`                         |
+| Create folder   | `lct> mkdir test`                    |
+| Delete file     | `lct> rm test.txt`                   |
+| Kill a process  | `lct> kill 1337`                     |
+| Search for text | `lct> grep -i error /var/log/syslog` |
+| Find files      | `lct> find . -name '*.py'`           |
 
 ------------------------------------------------------------------------
+
+
 
 ## Command History Format
 
@@ -261,6 +283,7 @@ Example entry:
 Stored under:
 
 `self.history`
+
 
 ------------------------------------------------------------------------
 
