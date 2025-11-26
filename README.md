@@ -19,7 +19,6 @@ A Python-based interactive Linux command automation utility.
 - [Example Commands](#example-commands)
 - [Command History Format](#command-history-format)
 - [Limitations](#limitations)
-- [Future Enhancements](#future-enhancements)
 
 ------------------------------------------------------------------------
 
