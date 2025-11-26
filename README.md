@@ -53,7 +53,7 @@ You can use LCAT in interactive REPL mode, or as an imported Python module.
 
 -   Provide a Python interface to execute common Linux commands
 -   Maintain a history of executed commands with stdout, stderr, exit codes, and timestamps
--   Support advanced functionality (recursive deletes, permission changes, process      control, searching)
+-   Support advanced functionality (recursive deletes, permission changes, process control, searching)
 -   Provide a clean interactive mode for real-time command execution
 -   Offer a reusable automation library for system management tasks
 
@@ -116,10 +116,10 @@ venv\Scripts\activate         # Windows
 All Linux commands eventually route through this method.
 
 It handles: 
-- building the command\
-- executing via subprocess\
-- capturing stdout/stderr\
-- returning structured results\
+- building the command
+- executing via subprocess
+- capturing stdout/stderr
+- returning structured results
 - logging history
 
 ### 2. Wrapper Methods for Linux Commands
@@ -128,14 +128,14 @@ Examples:
 
 #### User / System Info
 
--   `who_am_i()`\
--   `pwd()`\
--   `free()`\
+-   `who_am_i()`
+-   `pwd()`
+-   `free()`
 -   `top()`
 
 #### File & Directory Operations
 
--   `ls()`, `mkdir()`, `touch()`, `rm()`, `cd()`\
+-   `ls()`, `mkdir()`, `touch()`, `rm()`, `cd()`
 -   `chmod()`, `chown()`
 
 #### Search / Filter
@@ -165,21 +165,21 @@ Shows:
 ```
 
 The REPL: 
-- accepts method names\
-- parses arguments\
-- executes methods\
+- accepts method names
+- parses arguments
+- executes methods
 - prints formatted results
 
 ------------------------------------------------------------------------
 
 ## Features
 
--   Cross-command history tracking\
--   Clean stdout/stderr separation\
--   Graceful error handling\
--   Optional output summaries\
--   REPL mode\
--   Automation-friendly class design\
+-   Cross-command history tracking
+-   Clean stdout/stderr separation
+-   Graceful error handling
+-   Optional output summaries
+-   REPL mode
+-   Automation-friendly class design
 -   Consistent platform behavior
 
 ------------------------------------------------------------------------
