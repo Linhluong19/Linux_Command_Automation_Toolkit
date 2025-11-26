@@ -1,227 +1,197 @@
 # Linux Command Toolkit (LCAT)
 
-A Python-based interactive Linux command automation utility
+A Python-based interactive Linux command automation utility. 
 
-### 📑 Table of Contents
+------------------------------------------------------------------------
 
-Introduction
+## Table of Contents
 
-Project Overview
+- [Introduction](#introduction)
+- [Project Overview](#project-overview)
+- [Objectives](#objectives)
+- [Installation](#installation)
+- [Code Structure](#code-structure)
+- [How It Works](#how-it-works)
+- [Features](#features)
+- [Usage](#usage)
+    - [Interactive Mode](#interactive-mode)
+    - [Programmatic Usage](#programmatic-usage)
+- [Example Commands](#example-commands)
+- [Command History Format](#command-history-format)
+- [Limitations](#limitations)
+- [Future Enhancements](#future-enhancements)
 
-Objectives
+------------------------------------------------------------------------
 
-Installation
+## Introduction
 
-Code Structure
+Linux Command Toolkit (LCAT) is a Python-based utility that provides an interactive interface to execute and manage Linux commands programmatically. It simplifies running, monitoring, and automating common Linux operations-- such as file manipulation, process inspection, system monitoring, and directory navigation-- while collecting a
+structured execution history.
 
-How It Works
+This toolkit is especially useful for: 
+- developers working across multiple environments
+- students learning Linux system commands
+- automation engineers and sysadmins
+- anyone needing Python wrappers for Linux commands
 
-Features
+------------------------------------------------------------------------
 
-Usage
-
-Interactive Mode
-
-Programmatic Usage
-
-Example Commands
-
-Command History Format
-
-Limitations
-
-Future Enhancements
-
-Introduction
-
-Linux Command Toolkit (LCAT) is a Python-based utility that provides an interactive interface to execute and manage Linux commands programmatically. It simplifies running, monitoring, and automating common Linux operations — such as file manipulation, process inspection, system monitoring, and directory navigation — while collecting a structured execution history.
-
-This toolkit is especially useful for:
-
-developers working across multiple environments
-
-students learning Linux system commands
-
-automation engineers and sysadmins
-
-anyone needing Python wrappers for Linux commands
-
-Project Overview
+## Project Overview
 
 LCAT encapsulates common Linux shell operations inside a single Python class called LinuxCommandToolkit.
+
 It exposes methods corresponding to Linux utilities such as:
+`ls`, `rm`, `mkdir`, `touch`, `cd`, `pwd`, `chmod`, `chown`, `ps`, `kill`, `top`, `free`,`grep`, `find`
 
-ls, rm, mkdir, touch
+Each method internally uses Python's `subprocess` (except for `cd`), standardizes the output, and stores full execution metadata in a history log.
 
-cd, pwd, chmod, chown
+You can use LCAT in interactive REPL mode, or as an imported Python module.
 
-ps, kill, top, free
 
-grep, find
+------------------------------------------------------------------------
 
-Each method internally uses Python’s subprocess (except for cd), standardizes the output, and stores full execution metadata in a history log.
+## Objectives
 
-You can use LCAT in:
+-   Provide a Python interface to execute common Linux commands
+-   Maintain a history of executed commands with stdout, stderr, exit codes, and timestamps
+-   Support advanced functionality (recursive deletes, permission changes, process      control, searching)
+-   Provide a clean interactive mode for real-time command execution
+-   Offer a reusable automation library for system management tasks
 
-interactive REPL mode, or
+------------------------------------------------------------------------
 
-import it as a Python module in your own projects
 
-Objectives
+## Installation
 
-Provide a Python interface to execute common Linux commands
 
-Maintain a history of executed commands with stdout, stderr, exit codes, and timestamps
+### 1. Clone the repository
 
-Support advanced functionality (recursive deletes, permission changes, process control, searching, filtering)
+``` bash
+git clone https://github.com/Linhluong19/Linux_Command_Automation_Toolkit.git
+cd Linux_Command_Automation_Toolkit
+```
 
-Provide a clean interactive mode for real-time command execution
 
-Offer a reusable automation library for system management tasks
+### 2. Ensure Python 3.8+ is installed
 
-Installation
-1. Clone the repository
-git clone <repository_url>
-cd <repository_directory>
-
-2. Ensure Python 3.8+ is installed
+``` bash
 python3 --version
+```
 
-3. Dependencies
 
-LCAT only uses Python’s standard library, including:
+### 3. Dependencies
 
-subprocess
-
-os
-
-datetime
-
-typing
-
-json
-
-re
-
-sys
+LCAT uses only Python's standard library, including: 
+- `subprocess`
+- `os`
+- `datetime`
+- `typing`
+- `json`
+- `re`
+- `sys`
 
 No external packages are required.
 
-Optional: Set up a virtual environment
+### Optional: Create a virtual environment
+
+``` bash
 python3 -m venv venv
-source venv/bin/activate          # Linux/macOS
+source venv/bin/activate        # Linux/macOS
 # OR
-venv\Scripts\activate             # Windows
+venv\Scripts\activate         # Windows
+```
 
-pip install -r requirements.txt   # Only if provided
+------------------------------------------------------------------------
 
-Code Structure
-LCAT.py                 # Main Python script containing LinuxCommandToolkit class
-README.md               # Documentation (this file)
+## Code Structure
 
-How It Works
+    LCAT.py                 # Main Python script containing LinuxCommandToolkit class
+    README.md               # Documentation (this file)
 
-The toolkit revolves around a single class:
+------------------------------------------------------------------------
 
-LinuxCommandToolkit
-1. Central Execution Engine: _execute_command
+## How It Works
 
-All Linux commands eventually call this method.
+### 1. Central Execution Engine: `_execute_command()`
 
-It handles:
+All Linux commands eventually route through this method.
 
-command construction
+It handles: 
+- building the command\
+- executing via subprocess\
+- capturing stdout/stderr\
+- returning structured results\
+- logging history
 
-running commands using subprocess.run()
+### 2. Wrapper Methods for Linux Commands
 
-capturing stdout/stderr
+Examples:
 
-detecting errors
+#### User / System Info
 
-saving command history
+-   `who_am_i()`\
+-   `pwd()`\
+-   `free()`\
+-   `top()`
 
-returning structured dictionaries
+#### File & Directory Operations
 
-2. Methods That Wrap Linux Commands
+-   `ls()`, `mkdir()`, `touch()`, `rm()`, `cd()`\
+-   `chmod()`, `chown()`
 
-Each Linux utility is represented as a method:
+#### Search / Filter
 
-User / System Info
+-   `grep()`, `find()`
 
-who_am_i()
+#### Process Handling
 
-pwd()
+-   `ps()`, `kill()`
 
-free()
+Each returns a normalized dictionary.
 
-top()
+### 3. Interactive Shell (REPL)
 
-File & Directory Ops
+Running:
 
-ls(), mkdir(), touch(), rm(), cd()
-
-chmod(), chown()
-
-Search / Filtering
-
-grep(), find()
-
-Process Handling
-
-ps(), kill()
-
-The output format is normalized into Python dictionaries and optionally fed to a visualization helper.
-
-3. Interactive Shell (REPL)
-
-When run as:
-
+``` bash
 python3 LCAT.py
+```
 
+Shows:
 
-LCAT starts an interactive CLI:
+```
+    Welcome to the Linux Command Toolkit Interactive Mode!
+    Type 'exit' to quit.
+    lct>
+```
 
-Welcome to the Linux Command Toolkit Interactive Mode!
-Type 'exit' to quit.
-lct>
+The REPL: 
+- accepts method names\
+- parses arguments\
+- executes methods\
+- prints formatted results
 
+------------------------------------------------------------------------
 
-The REPL:
+## Features
 
-accepts LinuxCommandToolkit method names
+-   Cross-command history tracking\
+-   Clean stdout/stderr separation\
+-   Graceful error handling\
+-   Optional output summaries\
+-   REPL mode\
+-   Automation-friendly class design\
+-   Consistent platform behavior
 
-parses arguments
+------------------------------------------------------------------------
 
-executes the appropriate method
-
-prints structured formatted results
-
-Features
-
-Cross-method command history
-
-Clean stdout/stderr segmentation
-
-Graceful error handling
-
-Timeout protection
-
-Optional summaries for some commands
-
-Interactive mode
-
-Reusable for automation scripts
-
-Behaves consistently across environments
-
-Usage
+## Usage
 
 ### 1. Interactive Mode
 
-Run the script directly:
-
-`python3 LCAT.py`
-
+``` bash
+python3 LCAT.py
+```
 
 Example session:
 
@@ -233,16 +203,15 @@ lct> mkdir test_folder
 lct> rm -r old_logs
 ```
 
-
-Exit via:
+Exit:
 
 `lct> exit`
 
+------------------------------------------------------------------------
+
 ### 2. Programmatic Usage
 
-Import and integrate into your own scripts:
-
-```
+``` python
 from LCAT import LinuxCommandToolkit
 
 lct = LinuxCommandToolkit()
@@ -251,33 +220,35 @@ result = lct.ls(long_format=True, path=".")
 print(result["stdout"])
 ```
 
-Or:
+More examples:
 
-```
+``` python
 lct.mkdir("project", parents=True, verbose=True)
 lct.chmod("project", mode="755")
 lct.touch("project/app.py")
 ```
 
-Example Commands
+------------------------------------------------------------------------
 
-| Action          | Command                              |
-| --------------- | ------------------------------------ |
-| List all files  | `lct> ls -a`                         |
-| Long listing    | `lct> ls -l`                         |
-| Create folder   | `lct> mkdir test`                    |
-| Delete file     | `lct> rm test.txt`                   |
-| Kill a process  | `lct> kill 1337`                     |
-| Search for text | `lct> grep -i error /var/log/syslog` |
-| Find files      | `lct> find . -name '*.py'`           |
+## Example Commands
 
+  Action            Command
+  ----------------- --------------------------------------
+  List all files    `lct> ls -a`
+  Long listing      `lct> ls -l`
+  Create folder     `lct> mkdir test`
+  Delete file       `lct> rm test.txt`
+  Kill a process    `lct> kill 1337`
+  Search for text   `lct> grep -i error /var/log/syslog`
+  Find files        `lct> find . -name '*.py'`
 
+------------------------------------------------------------------------
 
-### Command History Format
+## Command History Format
 
-Every command results in a dictionary like:
+Example entry:
 
-```
+``` json
 {
   "command": "ls -l",
   "returncode": 0,
@@ -288,14 +259,16 @@ Every command results in a dictionary like:
 }
 ```
 
-
-Entries are stored in:
+Stored under:
 
 `self.history`
 
-### Limitations
+------------------------------------------------------------------------
 
-- Designed for Linux systems only
-- Commands run inside Python’s environment, not your shell
-- Does not support shell operators like pipes (|) or redirection (>)
-- REPL does not handle complex quoting
+## Limitations
+
+-   Designed for Linux systems only\
+-   Commands run inside Python, not the user's shell\
+-   Pipes (`|`) and redirection (`>`) not supported\
+-   REPL does not support complex quoting
+
