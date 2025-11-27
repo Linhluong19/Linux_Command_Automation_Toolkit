@@ -222,6 +222,9 @@ class LinuxCommandToolkit:
             Dict: The execution result returned by the rm operation
         """
         command = ['rm']
+
+        if isinstance(paths, str):
+            paths = [paths]
         if recursive:
             command.append('-r')
         if force:
